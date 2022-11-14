@@ -1,24 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { Signup } from "./pages/Signup";
+import { AuthProvider } from "./context/authContext"
+import { UserProfile } from "./pages/UserProfile";
+import { Login } from "./pages/Login";
+import { UpdateProfile } from "./pages/UpdateProfile";
+import { ForgotPassword } from "./pages/ForgotPassword";
+import { ProtectedRoute } from "./components/PrivateRoutes";
+import { Header } from "./components/Header";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <Header />
+      <BrowserRouter>
+        <Routes>
+          <Route path='/signup' element={<Signup />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/' element={
+            <ProtectedRoute>
+              <UserProfile />
+            </ProtectedRoute>
+          } />
+          <Route path='/update-profile' element={
+            <ProtectedRoute>
+              <UpdateProfile />
+            </ProtectedRoute>
+          } />
+          <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='*' element={
+            <div>
+              <h1>Rota não encontrada</h1>
+            </div>
+          } />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
